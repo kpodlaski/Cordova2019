@@ -17,7 +17,7 @@
  * under the License.
  */
 var app = {
-    
+    state :0,
 
     // Application Constructor
     initialize: function() {
@@ -30,12 +30,23 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         var button=document.getElementById("main_btn");
-        button.addEventListener("click",this.buttonClicked,false);
+        button.addEventListener("click",this.buttonClicked.bind(this),false);
     },
 
     buttonClicked : function (){
-        document.getElementById("main_text").setAttribute('style', 'display:none;');//.style.visibility='none';
-        document.getElementById("secondary_text").setAttribute('style', 'display:block;');//.style.visibility='block';
+        var toHide = null;
+        var toSHow = null;
+        if (this.state%2==0){
+            toHide = document.getElementById("main_text");
+            toShow = document.getElementById("secondary_text");
+        }
+        else{
+            toHide = document.getElementById("secondary_text");
+            toShow = document.getElementById("main_text");
+        }
+        toHide.setAttribute('style', 'display:none;');//.style.visibility='none';
+        toShow.setAttribute('style', 'display:block;');//.style.visibility='block';
+        this.state+=1;
     }
 };
 
