@@ -17,8 +17,6 @@
  * under the License.
  */
 var app = {
-    state :0,
-
     // Application Constructor
     initialize: function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
@@ -29,36 +27,38 @@ var app = {
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
-        var button=document.getElementById("main_btn");
-        button.addEventListener("click",this.buttonClicked.bind(this),false);
-
-        button=document.getElementById("tabele_btn");
-        button.addEventListener("click",function(e){
-            window.location = "tabele.html";
-        },false);
-
-        button=document.getElementById("pogoda_btn");
-        button.addEventListener("click",function(e){
-            window.location = "cweater.html"
-        },false);
-        
+        var button = document.getElementById("capture");
+        button.addEventListener('click',this.capturePhoto.bind(this),false);
     },
 
-    buttonClicked : function (){
-        var toHide = null;
-        var toSHow = null;
-        if (this.state%2==0){
-            toHide = document.getElementById("main_text");
-            toShow = document.getElementById("secondary_text");
-        }
-        else{
-            toHide = document.getElementById("secondary_text");
-            toShow = document.getElementById("main_text");
-        }
-        toHide.setAttribute('style', 'display:none;');//.style.visibility='none';
-        toShow.setAttribute('style', 'display:block;');//.style.visibility='block';
-        this.state+=1;
+    capturePhoto : function(){
+        console.log(navigator.camera);
+        console.log(this.cameraSuccess);
+        navigator.camera.getPicture(
+            this.cameraSuccess, 
+            this.cameraError, 
+            {
+                destinationType: Camera.DestinationType.DATA_URL,
+				quality: 75,
+				//sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+				saveToPhotoAlbum: true,
+                encodingType: Camera.EncodingType.JPEG,
+            });
+    },
+
+    cameraSuccess : function (image){
+        console.log(image);
+        var img = document.getElementById("photo");
+        photo.src="data:image/jpeg;base64,"+image;
+    },
+    
+    cameraError : function (msg){
+        console.log(msg);
+        alert("ERROR");
     }
+    
 };
+
+
 
 app.initialize();
