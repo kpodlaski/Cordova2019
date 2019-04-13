@@ -38,34 +38,40 @@ class Ball {
         r2 += Math.pow(this.y-ball_2.y,2);
         let size2 = Math.pow(
             this.size,2);
-        if (size2>r2) {
+        /*if (size2>r2) {
             this.vx = -this.vx;
             this.vy=-this.vy;
             ball_2.vx = - ball_2.vx;
             ball_2.vy= - ball_2.vy;
             console.log( r2 +" :: "+ size2);
         }
+        */
+       if (25>r2){
+           alert("Koniec gry");
+           ball_2.x = Math.floor(Math.random()*(this.canvas.width-ball_2.size));
+           ball_2.y = Math.floor(Math.random()*(this.canvas.height-ball_2.size));
+       }
         //
     }
 }
 let canvas = document.getElementById("paintCanvas");
-var ball, ball2;
+var ball, hole;
 
 function updateState(){
     ball.move();
-    ball2.move();
+    hole.move();
 }
 
 function colisionCheck(){
     ball.colisionsWithBorders();
-    ball2.colisionsWithBorders();
-    ball.colideWithBall(ball2);
+    hole.colisionsWithBorders();
+    ball.colideWithBall(hole);
 }
 
 function draw(){
     let ctx = canvas.getContext("2d");
     ctx.clearRect(0,0, canvas.width, canvas.height);
-    ball2.drawOnCanvas();
+    hole.drawOnCanvas();
     ball.drawOnCanvas();
 }
 
@@ -80,13 +86,35 @@ function startAnimation(){
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
     ball = new Ball(canvas, "img/ball.png", 30,40);
-    ball2 = new Ball(canvas, "img/hole.jpg", 80,100);
+    hole = new Ball(canvas, "img/hole.jpg", 80,100);
     //ball2.vx= -ball2.vx;
-    ball2.vx=0;
-    ball2.vy=0;
+    hole.vx=0;
+    hole.vy=0;
+    window.addEventListener("deviceorientation",processEvent, true);
+    window.addEventListener("devicemotion", handleMotion, true);
     animationLoop();
 }
 
-function onDeviceReady() {
+function processEvent(event) {
+    console.log('alpha: ' + event.alpha + '\n' +
+          'beta: ' + event.beta + '\n' +
+          'gamma: ' + event.gamma + '\n' +
+          'abs: '      + event.absolute + '\n');
+    ball.vx = event.alpha/5+1;
+    ball.vy = event.gamma/5;
+    console.log("ball.x= "+ball.x);
+    console.log("ball.vx= "+ball.vx);
+    console.log("ball.y= "+ball.y);
+    console.log("ball.vy= "+ball.vy);
+}
+
+function handleMotion(event) {
+    console.log("Interval :"+ event.interval);
+    console.log("Rotation Rate: "+event.rotationRate);
+    console.log("Acceleration:"+event.acceleration);
+    console.log("Acceleration with G:"+event.accelerationIncludingGravity);
+}
+
+function onDeviceReady() {  
     startAnimation();
 }
