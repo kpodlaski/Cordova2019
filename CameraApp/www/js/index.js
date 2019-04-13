@@ -48,8 +48,10 @@ var app = {
 
     cameraSuccess : function (image){
         console.log(image);
+        document.getElementById("pictureHolder").style.display='block';
         var img = document.getElementById("photo");
         photo.src="data:image/jpeg;base64,"+image;
+
     },
     
     cameraError : function (msg){
