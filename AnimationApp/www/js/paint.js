@@ -4,6 +4,7 @@ class Ball {
     img = new Image();
     vx =3;
     vy =4;
+    size = 50;
 
     constructor(canvas, x, y){
         this.img.src = "img/ball.png";
@@ -20,7 +21,7 @@ class Ball {
     drawOnCanvas(){
         let ctx = this.canvas.getContext("2d");
         //ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
-        ctx.drawImage(this.img, this.x, this.y, 50, 50);
+        ctx.drawImage(this.img, this.x, this.y, this.size, this.size);
     };
 
     colisionsWithBorders(){
@@ -31,6 +32,21 @@ class Ball {
             this.vx=-this.vx;
         }
     };
+
+    colideWithBall(ball_2){
+        let r2 = Math.pow(this.x-ball_2.x,2);
+        r2 += Math.pow(this.y-ball_2.y,2);
+        let size2 = Math.pow(
+            this.size,2);
+        if (size2>r2) {
+            this.vx = -this.vx;
+            this.vy=-this.vy;
+            ball_2.vx = - ball_2.vx;
+            ball_2.vy= - ball_2.vy;
+            console.log( r2 +" :: "+ size2);
+        }
+        //
+    }
 }
 let canvas = document.getElementById("paintCanvas");
 var ball, ball2;
@@ -43,6 +59,7 @@ function updateState(){
 function colisionCheck(){
     ball.colisionsWithBorders();
     ball2.colisionsWithBorders();
+    ball.colideWithBall(ball2);
 }
 
 function draw(){
