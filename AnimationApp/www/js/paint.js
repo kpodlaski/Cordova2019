@@ -6,8 +6,8 @@ class Ball {
     vy =4;
     size = 50;
 
-    constructor(canvas, x, y){
-        this.img.src = "img/ball.png";
+    constructor(canvas, imgPath, x, y){
+        this.img.src = imgPath;
         this.canvas = canvas;
         this.x = x;
         this.y = y;
@@ -65,8 +65,8 @@ function colisionCheck(){
 function draw(){
     let ctx = canvas.getContext("2d");
     ctx.clearRect(0,0, canvas.width, canvas.height);
-    ball.drawOnCanvas();
     ball2.drawOnCanvas();
+    ball.drawOnCanvas();
 }
 
 function animationLoop(){
@@ -79,9 +79,11 @@ function animationLoop(){
 function startAnimation(){
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
-    ball = new Ball(canvas ,30,40);
-    ball2 = new Ball(canvas, 80,100);
-    ball2.vx=-ball2.vx;
+    ball = new Ball(canvas, "img/ball.png", 30,40);
+    ball2 = new Ball(canvas, "img/hole.jpg", 80,100);
+    //ball2.vx= -ball2.vx;
+    ball2.vx=0;
+    ball2.vy=0;
     animationLoop();
 }
 
